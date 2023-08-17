@@ -60,21 +60,21 @@ async def process_callback_button1(callback_query: types.CallbackQuery):
     await bot.edit_message_text("Hello yapta", callback_query.from_user.id, callback_query.message.message_id,reply_markup=kb_home)
 
 
-@dp.callback_query_handler(lambda c: c.data == 'Vyplaty')
+@dp.callback_query_handler(lambda c: c.data == 'b1')
 async def process_callback_button1(callback_query: types.CallbackQuery):
 
     await bot.edit_message_text("Выплаты", callback_query.from_user.id, callback_query.message.message_id,reply_markup=VyplatyKb)
 
 
-@dp.callback_query_handler(lambda c: c.data == 'my')
+@dp.callback_query_handler(lambda c: c.data == 'b1_1')
 async def process_callback_button1(callback_query: types.CallbackQuery):
 
-    await bot.edit_message_text("Материальна помощь от университета", callback_query.from_user.id, callback_query.message.message_id,reply_markup=InlineKeyboardMarkup().add(InlineKeyboardButton('◀️ Назад', callback_data='Vyplaty'),home))
+    await bot.edit_message_text("Материальна помощь от университета", callback_query.from_user.id, callback_query.message.message_id,reply_markup=InlineKeyboardMarkup().add(InlineKeyboardButton('◀️ Назад', callback_data='b1'),home))
 
-@dp.callback_query_handler(lambda c: c.data == 'mp')
+@dp.callback_query_handler(lambda c: c.data == 'b1_2')
 async def process_callback_button1(callback_query: types.CallbackQuery):
 
-    await bot.edit_message_text("Материальная помощь от профкома", callback_query.from_user.id, callback_query.message.message_id,reply_markup=InlineKeyboardMarkup().add(InlineKeyboardButton('◀️ Назад', callback_data='Vyplaty'),home))
+    await bot.edit_message_text("Материальная помощь от профкома", callback_query.from_user.id, callback_query.message.message_id,reply_markup=InlineKeyboardMarkup().add(InlineKeyboardButton('◀️ Назад', callback_data='b1'),home))
 
 
 
