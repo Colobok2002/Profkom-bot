@@ -132,7 +132,7 @@ async def process_callback_edit_nev_mess(callback_query: types.CallbackQuery):
 
 @dp.message_handler()
 async def obrabotka(message: types.Message):
-    await bot.send_message(chat_id=message.from_user.id,text="qwertt")
+    await bot.delete_message(chat_id=message.from_user.id,message_id=message.message_id)
 
        
 def start_bot():
