@@ -2,10 +2,11 @@ import logging
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils.executor import start_webhook
 from aiogram import Bot, types
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+
 from sql_beek import selekt ,add,update
 from CONFIG import *
-from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from keyboard import *
+from keyboard import kb_home ,VyplatyKb , home
 
 
 
@@ -23,13 +24,12 @@ async def on_shutdown(dispatcher):
 
 
 async def set_default_commands(dp):
-    # await dp.bot.set_my_commands([
-    #     types.BotCommand("start", "Запустить бота"),
-    #     types.BotCommand("menu", "Меню"),
+    await dp.bot.set_my_commands([
+        types.BotCommand("start", "Запустить бота"),
+        types.BotCommand("menu", "Меню"),
     #     types.BotCommand("clear", "Очистка"),
     #     types.BotCommand("addcanl", "Добавить канал для уведомлений"),
-    # ])
-    return 1
+    ])
 
 @dp.message_handler(commands=['clear'])
 async def cleaar(message: types.Message):
@@ -47,45 +47,34 @@ async def cleaar(message: types.Message):
 @dp.message_handler(commands=['start', 'menu'])
 async def start(message: types.Message):
 
+    await set_default_commands(dp)
   
     await bot.delete_message(message.from_user.id, message.message_id)
 
-        
+    await bot.send_message(message.from_id, text = "Hello yapta",reply_markup=kb_home)
 
-@dp.callback_query_handler(lambda c: c.data == 'button1')
+        
+@dp.callback_query_handler(lambda c: c.data == 'home')
 async def process_callback_button1(callback_query: types.CallbackQuery):
 
+    await bot.edit_message_text("Hello yapta", callback_query.from_user.id, callback_query.message.message_id,reply_markup=kb_home)
 
 
-    if len(selekt(callback_query.from_user.id)['apikey']) == 0:
-        await bot.edit_message_text(chat_id=callback_query.from_user.id,
-                                    message_id=selekt(callback_query.from_user.id)['last_msg_bot'],
-                                    text='В настоящий момент вы еще не добавили поставщиков',
-                                    reply_markup=kb_lk)
-    else:
-        if len(selekt(callback_query.from_user.id)['base_canal']) != 0:
-            await bot.edit_message_text(chat_id=callback_query.from_user.id,
-                                        message_id=selekt(callback_query.from_user.id)['last_msg_bot'],
-                                        text="<b>Личный кабинет</b>\n\nТут вы можете:\n"
-                                             "1) Добавить нового поставщика\n"
-                                             "2) Выбрать поставшика с которым будете взаимодействовать\n"
-                                             "3) Включить\\Отключить уведомления\n"
-                                             "4)Удалить поставшика\n"
-                                             "5)Настроить канал",
-                                        reply_markup=kb_lk_full,
-                                        parse_mode='HTML')
-        else:
-            await bot.edit_message_text(chat_id=callback_query.from_user.id,
-                                        message_id=selekt(callback_query.from_user.id)['last_msg_bot'],
-                                        text="<b>Личный кабинет</b>\n\nТут вы можете:\n"
-                                             "1) Добавить нового поставщика\n"
-                                             "2) Выбрать поставшика с которым будете взаимодействовать\n"
-                                             "3) Включить\\Отключить уведомления",
-                                        reply_markup=kb_lk_full_no_kanal,
-                                        parse_mode='HTML')
+@dp.callback_query_handler(lambda c: c.data == 'Vyplaty')
+async def process_callback_button1(callback_query: types.CallbackQuery):
 
-    update(callback_query.from_user.id, {'flag': ''})
+    await bot.edit_message_text("Выплаты", callback_query.from_user.id, callback_query.message.message_id,reply_markup=VyplatyKb)
 
+
+@dp.callback_query_handler(lambda c: c.data == 'my')
+async def process_callback_button1(callback_query: types.CallbackQuery):
+
+    await bot.edit_message_text("Материальна помощь от университета", callback_query.from_user.id, callback_query.message.message_id,reply_markup=InlineKeyboardMarkup().add(InlineKeyboardButton('◀️ Назад', callback_data='Vyplaty'),home))
+
+@dp.callback_query_handler(lambda c: c.data == 'mp')
+async def process_callback_button1(callback_query: types.CallbackQuery):
+
+    await bot.edit_message_text("Материальная помощь от профкома", callback_query.from_user.id, callback_query.message.message_id,reply_markup=InlineKeyboardMarkup().add(InlineKeyboardButton('◀️ Назад', callback_data='Vyplaty'),home))
 
 
 
